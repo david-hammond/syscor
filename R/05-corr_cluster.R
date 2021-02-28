@@ -31,7 +31,7 @@
 
 
 corr_cluster <- function(folder, num_clust = 4) {
-
+        set.seed(538)
         fname <- get_db(folder, "correlations")
         df <- readRDS(fname)
 
@@ -53,7 +53,15 @@ corr_cluster <- function(folder, num_clust = 4) {
                   trace = "none", density.info = "none",
                   Rowv = ladderize(df_dend), 
                   Colv = ladderize(df_dend))
+        y = cutree(as.hclust(x$rowDendrogram), 1:dim(mydata)[1]) #this is how you identify systems
+        var = "iep-proxy-Acceptance-of-the-Rights-of-Others"
+
+        # pos = which(mydata < 0.2, arr.ind = T)
+        # tmp <- data.frame(uid.x = colnames(mydata)[pos[,1]], uid.y = colnames(mydata)[pos[,2]])
         clst <- data.frame(uid = names(clusters), cluster = clusters)
+        # tmp <- tmp %>% left_join(clst %>% rename(uid.x = uid, cluster1 = cluster)) %>%
+        #         left_join(clst %>% rename(uid.y = uid, cluster2 =  cluster)) %>%
+        #         filter(cluster1 == cluster2, uid.x != uid.y)
         clst = clst[x$rowInd,]
         pos = unique(clst$cluster)
         clst$cluster = factor(clst$cluster, unique(clst$cluster), ordered = T)

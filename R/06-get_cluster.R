@@ -30,8 +30,8 @@
 #' @author David Hammond
 
 
-get_cluster = function(x, which_cluster, folder){
-        x <- x %>% filter(cluster == levels(x$cluster)[which_cluster])
+get_cluster = function(x, which_obs, folder){
+        x <- x %>% filter(cluster %in% x$cluster[which_obs])
         fname <- get_db(folder, "correlations")
         df <- readRDS(fname)
         df <- df %>% 

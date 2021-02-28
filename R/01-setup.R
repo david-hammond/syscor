@@ -34,8 +34,8 @@ systr_setup <- function(df, meta, folder = "data", newscale = c(1,5)) {
         corr_db(folder)
         message("Calculating systemic centrality...")
         systemic_db(folder)
-        #message("Calculating vars that trend together...can take a while")
-        #trends_together_db(folder)
+        message("Calculating vars that trend together...can take a while")
+        trends_together_db(folder)
 
 
 }
