@@ -1,4 +1,4 @@
-Package: syscor
+Package: systr
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -13,4 +13,4 @@ Imports:
   tidyr (>= 1.1.2),
   corrr (>= 0.4.3)
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

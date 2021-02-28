@@ -12,16 +12,20 @@
 #' @examples
 #' @importFrom dplyr %>%
 #' @importFrom dplyr filter
+#' @importFrom dplyr bind_rows
 #' @author David Hammond
 #' @export
 
-whats_the_difference_between_stocks <- function(df, cluster1, cluster2, signif = 0.05) {
+whats_the_difference_between <- function(folder, cluster1, cluster2, signif = 0.05) {
+        fname <- get_db(folder, "scaled")
+        df <- readRDS(fname)
         cluster1 <- df %>% filter(geocode %in% cluster1) %>%
                 mutate(cluster = 1) 
         cluster2 <- df %>% filter(geocode %in% cluster2) %>%
                 mutate(cluster = 2)
         clusters = rbind(cluster1, cluster2) %>%
-                select(uid, cluster, rescaled) 
+                select(uid, cluster, year, rescaled) %>%
+                filter(year == min(year))
         clusters = split(clusters, clusters$uid)
         for (i in names(clusters)){
                 p = try(t.test(data = clusters[[i]], rescaled~cluster)$p.value)
@@ -35,7 +39,9 @@ whats_the_difference_between_stocks <- function(df, cluster1, cluster2, signif =
                 }
         }
         clusters = bind_rows(clusters) %>%
-                filter(p <= signif)%>%
-                mutate(type = "stock")
+                filter(p <= signif) %>%
+                mutate(diff = cluster2_mean - cluster1_mean) %>%
+                arrange(desc(diff))
+        clusters <- add_meta(clusters, folder)
         return(clusters)
 }
