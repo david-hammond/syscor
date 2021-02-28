@@ -25,7 +25,8 @@ systr_setup <- function(df, meta, folder = "data", newscale = c(1,5)) {
         fname <- get_db(folder, "meta")
         saveRDS(meta, fname, compress = "xz")
         df <- df %>% group_by(uid) %>% 
-                mutate(rescaled = rescale(value, to = newscale))
+                mutate(rescaled = rescale(value, to = newscale)) %>%
+                as.data.frame()
         fname <- get_db (folder, "rawdata")
         saveRDS(df, fname, compress = "xz")
         message("Calculating dy/dt...")
