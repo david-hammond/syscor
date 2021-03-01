@@ -24,6 +24,9 @@
 #' @importFrom stats complete.cases
 #' @importFrom igraph graph_from_data_frame
 #' @importFrom igraph degree
+#' @importFrom igraph betweenness
+#' @importFrom igraph E<-
+#' @importFrom igraph E
 
 #' @author David Hammond
 

@@ -4,7 +4,7 @@
 \alias{get_cluster}
 \title{Creates a Correlation Matrix}
 \usage{
-get_cluster(x, whch = 1)
+get_cluster(x, which_obs, folder)
 }
 \arguments{
 \item{df}{dataframe in format}

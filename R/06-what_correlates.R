@@ -17,8 +17,8 @@ what_correlates <- function(uids, folder, rval = 0.5) {
         fname <- get_db(folder, "correlations")
         df <- readRDS(fname)
         df <- df %>% filter(uid.x %in% uids) %>%
-                filter(abs(r) > rval)
-        df <- add_meta(df)
+                filter(abs(r) > rval, abs(r) < 0.99) %>%
+                add_meta(folder)
         pos <- which_is_dy_dt(df$uid.y)
         df$relationship <- "direct"
         df$relationship[pos] <-  "tipping"

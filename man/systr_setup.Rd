@@ -4,7 +4,7 @@
 \alias{systr_setup}
 \title{Creates a Correlation Matrix}
 \usage{
-systr_setup(df, meta, folder = "data", newscale = c(1, 5))
+systr_setup(df, meta, folder = "data", newscale = c(1, 5), do_trends = F)
 }
 \arguments{
 \item{df}{dataframe in format}

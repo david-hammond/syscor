@@ -17,7 +17,7 @@
 #' @author David Hammond
 #' @export
 
-systr_setup <- function(df, meta, folder = "data", newscale = c(1,5)) {
+systr_setup <- function(df, meta, folder = "data", newscale = c(1,5), do_trends = F) {
         dir_create(folder)
         tmp = meta
         tmp$uid = add_dy_dt(tmp$uid)
@@ -35,8 +35,11 @@ systr_setup <- function(df, meta, folder = "data", newscale = c(1,5)) {
         corr_db(folder)
         message("Calculating systemic centrality...")
         systemic_db(folder)
-        message("Calculating vars that trend together...can take a while")
-        trends_together_db(folder)
+        if(do_trends){
+                message("Calculating vars that trend together...can take a while")
+                trends_together_db(folder)
+        }
+
 
 
 }
