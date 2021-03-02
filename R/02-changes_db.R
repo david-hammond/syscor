@@ -42,7 +42,7 @@ changes_db <- function(df, folder) {
                 rename(year = earliest_yr, value = dydt) %>%
                 mutate(rescaled = value)
         fname <- get_db(folder, "gradients")
-        saveRDS(df, fname, compress = "xz")
+        saveRDS(dydt, fname, compress = "xz")
         
         #create corpus
         df <- df %>% rbind(dydt)
