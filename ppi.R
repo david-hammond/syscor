@@ -1,12 +1,18 @@
 library(systr)
 library(tidyverse)
-df = readRDS("./data/original_data/sdgs.rds")
-meta = readRDS("./data/original_data/sdg_meta.rds")
+library(hammond)
+hammond::hdb_login(host = "192.168.0.67", db = "nationalhdb_march2021", user = "admin", password = "admin")
+all = hdb_get(hdb_search("ppi.R") %>% filter(grepl(":", variablename)))
+df = all %>% mutate(uid = variablename) %>% select(uid, geocode, year, value)
+meta = all %>% select(-c(geocode, year, value, country)) %>% distinct()
 x = left_join(df, meta)
 #setup global
-folder = "data/global"
+folder = "data/ppi"
 newscale = c(1,10)
 systr_setup(df, meta, folder, newscale)
+x = readRDS("./data/ppi/06-corr_db.rds") %>% 
+        filter(abs(r)>0.5, grepl("/dt", uid.y), !grepl("/dt", uid.x))
+
 x = corr_cluster(folder, num_clust = 4)
 
 x = get_cluster(x, which_obs = 253, folder) %>% filter(abs(r) > 0.5, abs(r) <1) 
