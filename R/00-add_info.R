@@ -16,19 +16,19 @@
 #' @author David Hammond
 #' @export
 
-add_info <- function(df, folder = "data") {
-        fname <- get_db(folder, "meta")
-        meta = readRDS(fname)
+add_info <- function(df, info) {
+
+        
         if("uid" %in% names(df)){
-                df <- df %>% left_join(meta)
+                df <- df %>% left_join(info)
         }
         if("uid.x" %in% names(df)){
-                tmp <- meta
+                tmp <- info
                 names(tmp) <- paste0(names(tmp), ".x")
                 df <- df %>% left_join(tmp)
         }
         if("uid.y" %in% names(df)){
-                tmp <- meta
+                tmp <- info
                 names(tmp) <- paste0(names(tmp), ".y")
                 df <- df %>% left_join(tmp)
         }

@@ -4,7 +4,7 @@
 \alias{add_info}
 \title{Creates a Correlation Matrix}
 \usage{
-add_info(df, folder = "data")
+add_info(df, info)
 }
 \arguments{
 \item{df}{dataframe in format}
