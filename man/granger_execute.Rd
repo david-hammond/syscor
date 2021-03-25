@@ -4,7 +4,7 @@
 \alias{granger_execute}
 \title{Creates a Correlation Matrix}
 \usage{
-granger_execute(gcode, systr_file)
+granger_execute(gcode, changes, bivariates, corpus, subset_granger)
 }
 \arguments{
 \item{df}{dataframe in format}

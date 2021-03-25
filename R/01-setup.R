@@ -16,11 +16,11 @@
 #' @author David Hammond
 #' @export
 
-systr_setup <- function(df, meta, newscale = c(1,5), do_trends = F) {
-        saveRDS(df, systr_file$rawdata, compress = "xz")
-        tmp = meta
-        meta = rbind(meta, tmp)
+systr_setup <- function(df, meta, newscale = c(1,5), test_granger = F, subset_granger) {
         saveRDS(meta, systr_file$meta, compress = "xz")
+        
+        saveRDS(df, systr_file$rawdata, compress = "xz")
+
         df <- df %>% group_by(uid) %>% 
                 mutate(rescaled = rescale(value, to = newscale)) %>%
                 as.data.frame()
@@ -32,5 +32,5 @@ systr_setup <- function(df, meta, newscale = c(1,5), do_trends = F) {
         message("Calculating systemic centrality...")
         centrality_db()
         message("Calculating granger causality...")
-        granger_db()
+        granger_db(test = test_granger, subset_granger = subset_granger)
 }

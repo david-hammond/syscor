@@ -15,17 +15,30 @@
 #' @importFrom parallel makeCluster
 #' @importFrom parallel stopCluster
 #' @importFrom parallel clusterExport
+#' @importFrom parallel detectCores
 
 #' @author David Hammond
 
 
-granger_db <- function() {
-        cl <- makeCluster(detectCores())
+granger_db <- function(test = F, subset_granger =c("goal.x", 16)) {
+        
+        changes = readRDS(systr_file$changes) 
+        
+        bivariates = readRDS(systr_file$correlations) 
+        
+        corpus = readRDS(systr_file$scaled) 
+        
+        
+
         gcodes = readRDS(systr_file$changes) %>% pull(geocode) %>% unique()
-        clusterExport(cl, list("systr_file"),
-                      envir=environment())
-        tmp <- pblapply(gcodes, granger_execute, cl = cl)
-        stopCluster(cl)
+        if(test){
+               gcodes = gcodes[1:2] 
+        }
+        tmp <- pblapply(gcodes, granger_execute, 
+                        changes = changes,
+                        bivariates = bivariates,
+                        corpus = corpus,
+                        subset = subset_granger)
         tmp <- bind_rows(tmp)
         saveRDS(tmp, file = systr_file$granger)
 }

@@ -4,7 +4,7 @@
 \alias{granger_db}
 \title{Creates a Correlation Matrix}
 \usage{
-granger_db()
+granger_db(test = F, subset_granger = c("goal.x", 16))
 }
 \arguments{
 \item{df}{dataframe in format}

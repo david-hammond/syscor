@@ -10,44 +10,40 @@
 #' @examples
 #'
 #' @importFrom dplyr %>%
-#' @importFrom dplyr summarise
-#' @importFrom dplyr select
-#' @importFrom dplyr mutate
-#' @importFrom dplyr filter
-#' @importFrom dplyr rename
-#' @importFrom dplyr arrange
-#' @importFrom tidyr spread 
-#' @importFrom rlang .data
-#' @importFrom corrr correlate
-#' @importFrom corrr stretch
-#' @importFrom corrr as_cordf
-#' @importFrom stats complete.cases
-#' @importFrom igraph graph_from_data_frame
-#' @importFrom igraph degree
-#' @importFrom igraph betweenness
-#' @importFrom igraph E<-
-#' @importFrom igraph E
+#' @importFrom dplyr pull
+#' @importFrom pbapply pblapply
+#' @importFrom parallel makeCluster
+#' @importFrom parallel stopCluster
+#' @importFrom parallel clusterExport
+#' @importFrom parallel detectCores
+#' @importFrom parallel parLapply
 
 #' @author David Hammond
 
 
-granger_execute <- function(gcode, systr_file) {
+granger_execute <- function(gcode, changes, bivariates, corpus, subset_granger) {
 
-        changes = readRDS(systr_file$changes) %>% filter(geocode == gcode)
+        changes = changes %>% filter(geocode == gcode)
 
         
-        bivariates = readRDS(systr_file$correlations) %>% add_info(changes) %>%
+        bivariates = bivariates %>% add_info(changes) %>%
+                add_info(readRDS(systr_file$meta)) %>%
                 filter(complete.cases(.), uid.x != uid.y) 
-
+        pos = as.logical(bivariates[,subset_granger[1]] == subset_granger[2])
+        bivariates = bivariates[pos, ]
         bivariates = split(bivariates, 1:nrow(bivariates))
-        
-        corpus = readRDS(systr_file$scaled) %>% 
+
+        corpus = corpus %>% 
                 filter(geocode == gcode)
 
-        raw <- lapply(bivariates, systr_granger, granger_corpus = corpus)
+        cl <- makeCluster(detectCores())
+        
+        raw <- parLapply(bivariates, granger_calc, granger_corpus = corpus, cl = cl)
+        
+        stopCluster(cl)
 
         results = bind_rows(raw)
-        if(nrow(results) > 0){
-               return(results)
-        }
+ 
+        return(results)
+
 }

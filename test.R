@@ -4,9 +4,8 @@ library(scales)
 library(corrr)
 df = readRDS("./data/original_data/sdgs.rds")
 meta = readRDS("./data/original_data/sdg_meta.rds")
-folder = "data/global"
 newscale = c(1,10)
-systr_setup(df, meta, newscale)
+systr_setup(df, meta, newscale, test_granger = F, subset_granger = c("goal.x", "16"))
 x = corr_cluster(folder, num_clust = 4)
 
 x = get_cluster(x, which_cluster = 4) %>% filter(abs(r) > 0.5)
