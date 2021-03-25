@@ -26,8 +26,7 @@
 
 
 corr_db <- function(folder, use_geocode_and_time_as_obs = T) {
-        fname <- get_db(folder, "scaled")
-        df <- readRDS(fname) %>% 
+        df <- readRDS(systr_file$scaled) %>% 
                 mutate(value = rescaled) %>%
                 select(-rescaled)
 
@@ -56,6 +55,5 @@ corr_db <- function(folder, use_geocode_and_time_as_obs = T) {
                 rename(uid.x = x, uid.y = y)
         pos <- df$uid.x == df$uid.y
         df$r[pos] <- 1
-        fname <- get_db(folder, "correlations")
-        saveRDS(df, fname, compress = "xz")
+        saveRDS(df, systr_file$correlations, compress = "xz")
 }

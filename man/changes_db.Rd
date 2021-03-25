@@ -4,7 +4,7 @@
 \alias{changes_db}
 \title{Creates a Correlation Matrix}
 \usage{
-changes_db(df, folder)
+changes_db(df)
 }
 \arguments{
 \item{df}{dataframe in format}

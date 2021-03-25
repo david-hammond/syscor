@@ -31,9 +31,8 @@
 #' @author David Hammond
 
 
-systemic_db <- function(folder, rval = 0.5) {
-        fname <- get_db(folder, "correlations")
-        df <- readRDS(fname) 
+granger_db <- function(rval = 0.5) {
+        df <- readRDS(systr_file$correlations) 
         df <- df %>% filter(complete.cases(r)) 
         g_total <- igraph::graph_from_data_frame(df[, c("uid.x", "uid.y")])
         df <- df %>% filter(abs(r) > rval)
@@ -47,6 +46,5 @@ systemic_db <- function(folder, rval = 0.5) {
         centrality <- centrality_signif %>% left_join(centrality_total) %>%
                 mutate(centrality = signif/total) %>% 
                 arrange(desc(centrality)) %>% left_join(centrality_betweenness)
-        fname <- get_db(folder, "systemic_centrality")
-        saveRDS(centrality, fname, compress = "xz")
+        saveRDS(centrality, systr_file$centrality, compress = "xz")
 }

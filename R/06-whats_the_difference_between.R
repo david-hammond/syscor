@@ -16,9 +16,8 @@
 #' @author David Hammond
 #' @export
 
-whats_the_difference_between <- function(folder, cluster1, cluster2, signif = 0.05) {
-        fname <- get_db(folder, "scaled")
-        df <- readRDS(fname)
+whats_the_difference_between <- function(cluster1, cluster2, signif = 0.05) {
+        df <- readRDS(systr_file$scaled)
         cluster1 <- df %>% filter(geocode %in% cluster1) %>%
                 mutate(cluster = 1) 
         cluster2 <- df %>% filter(geocode %in% cluster2) %>%

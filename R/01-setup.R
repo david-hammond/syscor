@@ -10,36 +10,27 @@
 #'
 #' @examples
 #'
-#' @importFrom fs dir_create
 #' @importFrom dplyr %>%
 #' @importFrom dplyr mutate
 #' @importFrom scales rescale
 #' @author David Hammond
 #' @export
 
-systr_setup <- function(df, meta, folder = "data", newscale = c(1,5), do_trends = F) {
-        dir_create(folder)
+systr_setup <- function(df, meta, newscale = c(1,5), do_trends = F) {
+        saveRDS(df, systr_file$rawdata, compress = "xz")
         tmp = meta
-        tmp$uid = add_dy_dt(tmp$uid)
         meta = rbind(meta, tmp)
-        fname <- get_db(folder, "meta")
-        saveRDS(meta, fname, compress = "xz")
+        saveRDS(meta, systr_file$meta, compress = "xz")
         df <- df %>% group_by(uid) %>% 
                 mutate(rescaled = rescale(value, to = newscale)) %>%
                 as.data.frame()
-        fname <- get_db (folder, "rawdata")
-        saveRDS(df, fname, compress = "xz")
-        message("Calculating dy/dt...")
-        changes_db(df, folder)
+        saveRDS(df, systr_file$scaled, compress = "xz")
+        message("Calculating changes...")
+        changes_db(df)
         message("Correlating...")
-        corr_db(folder)
+        corr_db()
         message("Calculating systemic centrality...")
-        systemic_db(folder)
-        if(do_trends){
-                message("Calculating vars that trend together...can take a while")
-                trends_together_db(folder)
-        }
-
-
-
+        centrality_db()
+        message("Calculating granger causality...")
+        granger_db()
 }

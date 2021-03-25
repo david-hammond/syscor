@@ -21,7 +21,7 @@
 #' @author David Hammond
 
 
-changes_db <- function(df, folder) {
+changes_db <- function(df) {
         pc <- df %>% group_by(uid, geocode) %>%
                 summarise(earliest_yr = min(year), 
                           latest_yr = max(year), 
@@ -31,25 +31,5 @@ changes_db <- function(df, folder) {
                        percentage = absolute/earliest_value,
                        dydt = absolute/(latest_yr-earliest_yr)) %>%
                 ungroup() 
-        fname <- get_db(folder, "pc_changes")
-        saveRDS(pc, fname, compress = "xz")
-
-        
-        #create trends_together
-        
-        dydt = pc %>% select(uid, geocode, earliest_yr, dydt) %>%
-                mutate(uid = add_dy_dt(uid)) %>%
-                rename(year = earliest_yr, value = dydt) %>%
-                mutate(rescaled = value)
-        fname <- get_db(folder, "gradients")
-        saveRDS(dydt, fname, compress = "xz")
-        
-        #create corpus
-        df <- df %>% rbind(dydt)
-        fname <- get_db(folder, "scaled")
-        saveRDS(df, fname, compress = "xz")
-        
-      
-
-        
+        saveRDS(pc, systr_file$changes, compress = "xz")
 }
