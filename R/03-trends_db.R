@@ -17,6 +17,7 @@
 
 trends_together_db <- function(folder) {
         fname <- get_db(folder, "gradients")
+        fname = "./data/global/03-gradients_db.rds"
         dydt = readRDS(fname) %>%
                 select(-rescaled)
         #create trends_together
