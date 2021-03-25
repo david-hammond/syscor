@@ -16,7 +16,7 @@
 #' @author David Hammond
 #' @export
 
-add_meta <- function(df, folder = "data") {
+add_info <- function(df, folder = "data") {
         fname <- get_db(folder, "meta")
         meta = readRDS(fname)
         if("uid" %in% names(df)){
