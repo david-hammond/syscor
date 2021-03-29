@@ -23,7 +23,9 @@
 
 granger_execute <- function(gcode, changes, bivariates, corpus, subset_granger) {
 
-                changes = changes %>% filter(geocode == gcode)
+        print(gcode)
+        
+        changes = changes %>% filter(geocode == gcode)
 
         
         bivariates = bivariates %>% add_info(changes) %>%
