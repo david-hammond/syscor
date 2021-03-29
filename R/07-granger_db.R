@@ -20,7 +20,7 @@
 #' @author David Hammond
 
 
-granger_db <- function(test = F, subset_granger =c("goal.x", 16)) {
+granger_db <- function(test = F, subset_granger =c("goal.x", "16")) {
         
         changes = readRDS(systr_file$changes) 
         

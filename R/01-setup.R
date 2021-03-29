@@ -29,7 +29,7 @@ systr_setup <- function(df, meta, newscale = c(1,5), test_granger = F, subset_gr
         changes_db(df)
         message("Correlating...")
         corr_db()
-        message("Calculating systemic centrality...")
+        message("Calculating centrality...")
         centrality_db()
         message("Calculating granger causality...")
         granger_db(test = test_granger, subset_granger = subset_granger)

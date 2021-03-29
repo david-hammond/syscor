@@ -23,27 +23,34 @@
 
 granger_execute <- function(gcode, changes, bivariates, corpus, subset_granger) {
 
-        changes = changes %>% filter(geocode == gcode)
+                changes = changes %>% filter(geocode == gcode)
 
         
         bivariates = bivariates %>% add_info(changes) %>%
                 add_info(readRDS(systr_file$meta)) %>%
-                filter(complete.cases(.), uid.x != uid.y) 
-        pos = as.logical(bivariates[,subset_granger[1]] == subset_granger[2])
-        bivariates = bivariates[pos, ]
-        bivariates = split(bivariates, 1:nrow(bivariates))
-
-        corpus = corpus %>% 
-                filter(geocode == gcode)
-
-        cl <- makeCluster(detectCores())
+                filter(uid.x != uid.y) %>%
+                filter(!is.na(geocode.x) & !is.na(geocode.y))
         
-        raw <- parLapply(bivariates, granger_calc, granger_corpus = corpus, cl = cl)
-        
-        stopCluster(cl)
+        if(nrow(bivariates) > 0){
+                pos = as.logical(bivariates[,subset_granger[1]] == subset_granger[2])
+                bivariates = bivariates[pos, ]
+                bivariates = split(bivariates, 1:nrow(bivariates))
+                
+                corpus = corpus %>% 
+                        filter(geocode == gcode)
+                
+                cl <- makeCluster(detectCores())
+                
+                raw <- parLapply(bivariates, granger_calc, granger_corpus = corpus, cl = cl)
+                
+                stopCluster(cl)
+                
+                results = bind_rows(raw)
+                
+                return(results)
+        }else{
+                message(paste("Skipping", gcode, "- No Data"))
+        }
 
-        results = bind_rows(raw)
- 
-        return(results)
 
 }
