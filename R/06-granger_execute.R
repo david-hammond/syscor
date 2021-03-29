@@ -32,8 +32,11 @@ granger_execute <- function(gcode, changes, bivariates, corpus, subset_granger) 
                 filter(!is.na(geocode.x) & !is.na(geocode.y))
         
         if(nrow(bivariates) > 0){
-                pos = as.logical(bivariates[,subset_granger[1]] == subset_granger[2])
-                bivariates = bivariates[pos, ]
+                if(!is.null(subset_granger)){
+                        pos = as.logical(bivariates[,subset_granger[1]] == subset_granger[2])
+                        bivariates = bivariates[pos, ] 
+                }
+
                 bivariates = split(bivariates, 1:nrow(bivariates))
                 
                 corpus = corpus %>% 

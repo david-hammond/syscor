@@ -16,7 +16,7 @@
 #' @author David Hammond
 #' @export
 
-systr_setup <- function(df, meta, newscale = c(1,5), test_granger = F, subset_granger) {
+systr_setup <- function(df, meta, newscale = c(1,5), test_granger = F, subset_granger = NULL) {
         saveRDS(meta, systr_file$meta, compress = "xz")
         
         saveRDS(df, systr_file$rawdata, compress = "xz")
