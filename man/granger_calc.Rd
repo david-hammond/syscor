@@ -4,7 +4,7 @@
 \alias{granger_calc}
 \title{Creates a Correlation Matrix}
 \usage{
-granger_calc(x, granger_corpus)
+granger_calc(x, corpus)
 }
 \arguments{
 \item{df}{dataframe in format}
