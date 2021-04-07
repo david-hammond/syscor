@@ -16,6 +16,11 @@
 #' @importFrom dplyr filter
 #' @importFrom dplyr rename
 #' @importFrom dplyr arrange
+#' @importFrom dplyr relocate
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_line
+#' @importFrom ggplot2 aes
+#' @importFrom tibble tibble
 #' @importFrom tidyr spread 
 #' @importFrom tidyr gather 
 #' @importFrom rlang .data
@@ -57,10 +62,20 @@ granger_calc = function(x, corpus){
                                 x$f_test = as.numeric(gtest$Granger$p.value)
                                 x$chi_test = as.numeric(gtest$Instant$p.value)
                                 x$lag = lags
-                                tmp = tmp %>% gather("uid", "value", -year)
-                                p = ggplot(tmp, aes(year, value, colour = uid)) + geom_line()
-                                x = tibble(x, plot = list(p))
-                                x$plot = p
+                                
+                                x$geocode = unique(corpus$geocode)
+                                x = x %>% relocate(geocode) %>% add_info(get_meta()) 
+                                tmp = get_changes() %>% filter(geocode %in% unique(corpus$geocode)) %>% 
+                                        relocate(geocode)
+                                names(tmp)[-1] = paste0(names(tmp[-1]), ".x")
+                                x = x %>% left_join(tmp)
+                                names(tmp)[-1] = gsub(".x", ".y", names(tmp[-1]))
+                                x = x %>% left_join(tmp)
+                                
+                                # tmp = tmp %>% gather("uid", "value", -year) %>%
+                                #         add_info(get_meta))
+                                # p = ggplot(tmp, aes(year, value, colour = variablename)) + geom_line()
+                                # x = tibble(x, plot = list(p))
                         }
         
                         return(x)

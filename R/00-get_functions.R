@@ -33,7 +33,7 @@ get_corpus <- function() {
 
 get_meta <- function() {
         
-        df = readRDS(systr_file$meta)
+        df = readRDS(systr::systr_file$meta)
         return(df)
 }
 
@@ -53,7 +53,7 @@ get_meta <- function() {
 
 get_changes <- function() {
         
-        df = readRDS(systr_file$changes)
+        df = readRDS(systr::systr_file$changes)
         return(df)
 }
 
@@ -72,7 +72,7 @@ get_changes <- function() {
 
 get_corrs <- function() {
         
-        df = readRDS(systr_file$correlations)
+        df = readRDS(systr::systr_file$correlations)
         return(df)
 }
 
@@ -91,6 +91,6 @@ get_corrs <- function() {
 
 get_centrality <- function() {
         
-        df = readRDS(systr_file$centrality)
+        df = readRDS(systr::systr_file$centrality)
         return(df)
 }

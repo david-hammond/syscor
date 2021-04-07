@@ -51,7 +51,9 @@ granger_execute <- function(gcode, corpus) {
                 stopCluster(cl)
                 
                 results = bind_rows(raw)
-                
+                fname = paste0("granger_", gcode, ".rds")
+                saveRDS(results, fname, compress = "xz")
+                message(paste("Output saved to", fname))
                 return(results)
         }else{
                 message(paste("Skipping", gcode, "- No Data"))
