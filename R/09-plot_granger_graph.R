@@ -33,11 +33,14 @@
 #' @export
 
 
-systr_granger_graph = function(filename, pval = 0.05, filter_for_same_direction = T){
+systr_granger_graph = function(filename, pval = 0.15, filter_for_same_direction = T){
         library(igraph)
         x = readRDS(filename) %>% filter(f_test < pval)
         if(filter_for_same_direction){
-         x = x %>% filter(sign(absolute.x) == sign(absolute.y))
+         # x = x %>% filter((absolute.x >=0 & absolute.y >= 0) |
+         #                          (absolute.x <=0 & absolute.y <= 0)       )
+         # x = x %>% filter(absolute.x !=0 & absolute.y != 0)
+                x = x %>% filter(sign(higher_ratio.x) == sign(higher_ratio.y))
         }
         cols = data.frame(v = c(x$variablename.x, x$variablename.y), col = c(x$absolute.x, x$absolute.y))
         good_colour = "#00BFC480"

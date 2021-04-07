@@ -16,8 +16,8 @@ corpus = hdb_get(x) %>% select(uid, geocode, year, value)# %>% filter(geocode ==
 newscale = c(1,5)
 
 systr_setup(corpus, meta, newscale)
-tmp = corpus %>% filter(geocode == "LBN")
+tmp = corpus %>% filter(geocode == "MEX")
 mex = systr_granger(tmp)
-filename = "MEX_granger.rds"
-x = systr_granger_graph(filename, pval = 0.15, filter_for_same_direction = F)
+filename = "granger_MEX.rds"
+x = systr_granger_graph(filename, pval = 0.15, filter_for_same_direction = T)
 x = mex %>% filter(f_test < 0.05)

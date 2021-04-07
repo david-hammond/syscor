@@ -26,7 +26,8 @@ changes_db <- function(df) {
                 summarise(earliest_yr = min(year), 
                           latest_yr = max(year), 
                           earliest_value = rescaled[year == min(year)],
-                          latest_value = rescaled[year == max(year)]) %>%
+                          latest_value = rescaled[year == max(year)],
+                          higher_ratio = 1-mean(rescaled[year != min(year)])/rescaled[year == min(year)]) %>%
                 mutate(absolute = latest_value-earliest_value,
                        percentage = absolute/earliest_value,
                        dydt = absolute/(latest_yr-earliest_yr)) %>%
