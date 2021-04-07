@@ -27,9 +27,9 @@
 
 #' @author David Hammond
 
-granger_calc = function(x, granger_corpus){
-        a = granger_corpus %>% filter(uid %in% x$uid.x)
-        b = granger_corpus %>% filter(uid %in% x$uid.y)
+granger_calc = function(x, corpus){
+        a = corpus %>% filter(uid %in% x$uid.x)
+        b = corpus %>% filter(uid %in% x$uid.y)
         if(nrow(a) > 0 & nrow(b) > 0){
                 #granger + interpolation
                 tmp = rbind(a, b)
@@ -53,7 +53,8 @@ granger_calc = function(x, granger_corpus){
                         gdata = VAR(granger[,2:3], p = lags)
                         gtest = try(causality(gdata, cause = "uid.x"),  silent=TRUE)
                         if(class(gtest) != "try-error"){
-                                x$granger = as.numeric(gtest$Granger$p.value)
+                                x$f_test = as.numeric(gtest$Granger$p.value)
+                                x$chi_test = as.numeric(gtest$Instant$p.value)
                                 x$lag = lags
                         }
         

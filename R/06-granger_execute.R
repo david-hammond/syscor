@@ -46,7 +46,7 @@ granger_execute <- function(gcode, corpus) {
                 
                 cl <- makeCluster(detectCores())
                 
-                raw <- pbapply(bivariates, granger_calc, granger_corpus = corpus, cl = cl)
+                raw <- pblapply(bivariates, granger_calc, corpus = corpus, cl = cl)
                 
                 stopCluster(cl)
                 
