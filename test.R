@@ -20,4 +20,4 @@ newscale = c(1,5)
 
 systr_setup(corpus, meta, newscale)
 corpus = corpus %>% filter(geocode == "MEX")
-mex = systr_granger(mex)
+mex = systr_granger(corpus)
