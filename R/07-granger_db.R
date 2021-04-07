@@ -22,19 +22,8 @@
 
 systr_granger <- function(corpus) {
         
-        changes = readRDS(systr_file$changes) %>%
-                filter(uid %in% corpus$uid, geocode %in% corpus$geocode)
-        
-        bivariates = expand.grid(uid.x = corpus$uid, 
-                                 uid.y = corpus$uid, 
-                                 stringsAsFactors = F) %>% 
-                as.data.frame() %>%
-                filter(uid.x != uid.y)
-        
         gcodes = subset_granger %>% pull(geocode) %>% unique()
         tmp <- pblapply(gcodes, granger_execute, 
-                        changes = changes,
-                        bivariates = bivariates,
                         corpus = corpus)
         tmp <- bind_rows(tmp)
         return(tmp)

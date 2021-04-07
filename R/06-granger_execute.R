@@ -21,18 +21,28 @@
 #' @author David Hammond
 
 
-granger_execute <- function(gcode, changes, bivariates, corpus) {
+granger_execute <- function(gcode, corpus) {
         
         message(paste("Calculating granger for", gcode))
+        
+        changes = readRDS(systr_file$changes) %>%
+                filter(uid %in% corpus$uid, geocode %in% corpus$geocode)
 
-        changes = changes %>% filter(geocode == gcode)
+        corpus = corpus %>% 
+                filter(geocode == gcode)
+        
+        bivariates = expand.grid(uid.x = unique(corpus$uid), 
+                                 uid.y = unique(corpus$uid), 
+                                 stringsAsFactors = F) %>% 
+                as.data.frame() %>%
+                filter(uid.x != uid.y)
+
 
         if(nrow(bivariates) > 0){
 
                 bivariates = split(bivariates, 1:nrow(bivariates))
                 
-                corpus = corpus %>% 
-                        filter(geocode == gcode)
+                
                 
                 cl <- makeCluster(detectCores())
                 
