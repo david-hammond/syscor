@@ -16,7 +16,7 @@
 #' @author David Hammond
 #' @export
 
-systr_setup <- function(df, meta, newscale = c(1,5), test_granger = F, subset_granger = NULL) {
+systr_setup <- function(df, meta, newscale = c(1,5)) {
         saveRDS(meta, systr_file$meta, compress = "xz")
         
         saveRDS(df, systr_file$rawdata, compress = "xz")
@@ -31,6 +31,4 @@ systr_setup <- function(df, meta, newscale = c(1,5), test_granger = F, subset_gr
         corr_db()
         message("Calculating centrality...")
         centrality_db()
-        message("Calculating granger causality...")
-        granger_db(test = test_granger, subset_granger = subset_granger)
 }
