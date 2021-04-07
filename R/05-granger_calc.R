@@ -56,8 +56,8 @@ granger_calc = function(x, corpus){
                                 x$f_test = as.numeric(gtest$Granger$p.value)
                                 x$chi_test = as.numeric(gtest$Instant$p.value)
                                 x$lag = lags
-                                tmp = tmp %>% gather("var", "value", -year)
-                                p = ggplot(tmp, aes(year, value, colour = var)) + geom_line()
+                                tmp = tmp %>% gather("uid", "value", -year)
+                                p = ggplot(tmp, aes(year, value, colour = uid)) + geom_line()
                                 x = tibble(x, plot = list(p))
                                 x$plot = p
                         }
