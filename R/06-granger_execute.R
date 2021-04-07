@@ -22,6 +22,8 @@
 
 
 granger_execute <- function(gcode, changes, bivariates, corpus) {
+        
+        message(paste("Calculating granger for", gcode))
 
         changes = changes %>% filter(geocode == gcode)
 
@@ -34,7 +36,7 @@ granger_execute <- function(gcode, changes, bivariates, corpus) {
                 
                 cl <- makeCluster(detectCores())
                 
-                raw <- parLapply(bivariates, granger_calc, granger_corpus = corpus, cl = cl)
+                raw <- pbapply(bivariates, granger_calc, granger_corpus = corpus, cl = cl)
                 
                 stopCluster(cl)
                 
