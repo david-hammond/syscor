@@ -53,16 +53,10 @@ granger_calc = function(x, granger_corpus){
                         gdata = VAR(granger[,2:3], p = lags)
                         gtest = try(causality(gdata, cause = "uid.x"),  silent=TRUE)
                         if(class(gtest) != "try-error"){
-                                x$granger.x2y = as.numeric(gtest$Granger$p.value)
+                                x$granger = as.numeric(gtest$Granger$p.value)
+                                x$lag = lags
                         }
-                        
-                        lags = as.numeric(VARselect(granger[,3:2], lag.max = max_lag)$selection[1])
-                        lags = ifelse(is.na(lags), 2, lags)
-                        gdata = try(VAR(granger[,3:2], p = lags))
-                        gtest = try(causality(gdata, cause = "uid.y"),  silent=TRUE)
-                        if(class(gtest) != "try-error"){
-                                x$granger.y2x = as.numeric(gtest$Granger$p.value)
-                        }
+        
                         return(x)
                 }
         }
