@@ -4,7 +4,7 @@
 \alias{systr_setup}
 \title{Creates a Correlation Matrix}
 \usage{
-systr_setup(df, meta, newscale = c(1, 5), test_granger = F, subset_granger)
+systr_setup(df, meta, newscale = c(1, 5))
 }
 \arguments{
 \item{df}{dataframe in format}
