@@ -17,6 +17,7 @@
 #' @importFrom dplyr rename
 #' @importFrom dplyr arrange
 #' @importFrom tidyr spread 
+#' @importFrom tidyr gather 
 #' @importFrom rlang .data
 #' @importFrom vars VARselect
 #' @importFrom vars VAR
