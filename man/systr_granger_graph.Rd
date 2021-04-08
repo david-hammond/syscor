@@ -4,7 +4,7 @@
 \alias{systr_granger_graph}
 \title{Creates a Correlation Matrix}
 \usage{
-systr_granger_graph(filename, pval = 0.05)
+systr_granger_graph(filename, pval = 0.15, filter_for_same_direction = T)
 }
 \arguments{
 \item{df}{dataframe in format}

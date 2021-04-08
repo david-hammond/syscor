@@ -33,14 +33,15 @@
 #' @export
 
 
-systr_granger_graph = function(filename, pval = 0.15, filter_for_same_direction = T){
+systr_granger_graph = function(granger, pval = 0.15, filter_for_same_direction = T){
         library(igraph)
-        x = readRDS(filename) %>% filter(f_test < pval)
+        x = granger %>% filter(f_test < pval)
         if(filter_for_same_direction){
-         # x = x %>% filter((absolute.x >=0 & absolute.y >= 0) |
-         #                          (absolute.x <=0 & absolute.y <= 0)       )
+         y = x %>% filter((dydt.x >=0 & dydt.y >= 0))
+         z = x %>% filter((dydt.x < 0 & dydt.y < 0))
+         x = rbind(y,z) %>% group_by(uid.x, uid.y) %>% top_n(1, -f_test)
          # x = x %>% filter(absolute.x !=0 & absolute.y != 0)
-                x = x %>% filter(sign(higher_ratio.x) == sign(higher_ratio.y))
+         #       x = x %>% filter(sign(higher_ratio.x) == sign(higher_ratio.y))
         }
         cols = data.frame(v = c(x$variablename.x, x$variablename.y), col = c(x$absolute.x, x$absolute.y))
         good_colour = "#00BFC480"
@@ -55,7 +56,7 @@ systr_granger_graph = function(filename, pval = 0.15, filter_for_same_direction 
         plot(g, edge.arrow.size=0.5, layout = l*1,
              vertex.label.cex = 0.9, edge.curved=0.15, rescale=F, 
              vertex.label.family = "Helvetica", main.label.family = "Helvetica",
-             vertex.frame.width = 2, main = filename)
+             vertex.frame.width = 2, main = unique(granger$geocode))
         legend("topright",legend=c("Value Decreased", "Value Increased"),col='black',pch=21, pt.cex = 1, 
                pt.bg=c(good_colour, bad_colour), bg= NA)
         return(g)

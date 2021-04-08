@@ -29,12 +29,13 @@
 #' @importFrom vars causality
 #' @importFrom padr pad
 #' @importFrom imputeTS na_interpolation
+#' @importFrom lubridate year
 
 
 #' @author David Hammond
 
 granger_calc = function(x, corpus){
-        a = corpus %>% filter(uid %in% x$uid.x)
+        a = corpus %>% filter(uid %in% x$uid.x) 
         b = corpus %>% filter(uid %in% x$uid.y) 
         if(nrow(a) > 0 & nrow(b) > 0){
                 #granger + interpolation
@@ -54,9 +55,14 @@ granger_calc = function(x, corpus){
 
                 max_lag = 30
                 if(round(sd(granger$uid.x),1) > 0 & round(sd(granger$uid.y),1) > 0){
-                        lags = as.numeric(VARselect(granger[,2:3], lag.max = max_lag)$selection[1])
+                        # lags = VARselect(granger[,2:3], lag.max = max_lag)
+                        # lags = ceiling(as.numeric(mean(lags$selection, na.rm = T)))
+                        granger = ts(granger[,2:3], start = c(year(min(granger$year)), 1), frequency = 12)
+                        lags = as.numeric(VARselect(granger, lag.max = max_lag)$selection[1])
+                        lags = VARselect(granger, lag.max = max_lag)
+                        lags = ceiling(as.numeric(mean(lags$selection, na.rm = T)))
                         lags = ifelse(is.na(lags), 2, lags)
-                        gdata = VAR(granger[,2:3], p = lags)
+                        gdata = VAR(granger, p = lags)
                         gtest = try(causality(gdata, cause = "uid.x"),  silent=TRUE)
                         if(class(gtest) != "try-error"){
                                 x$f_test = as.numeric(gtest$Granger$p.value)
@@ -75,7 +81,7 @@ granger_calc = function(x, corpus){
                                 # tmp = tmp %>% gather("uid", "value", -year) %>%
                                 #         add_info(get_meta))
                                 # p = ggplot(tmp, aes(year, value, colour = variablename)) + geom_line()
-                                # x = tibble(x, plot = list(p))
+                                x = tibble(x, ts = list(granger))
                         }
         
                         return(x)
