@@ -55,10 +55,7 @@ granger_calc = function(x, corpus){
 
                 max_lag = 30
                 if(round(sd(granger$uid.x),1) > 0 & round(sd(granger$uid.y),1) > 0){
-                        # lags = VARselect(granger[,2:3], lag.max = max_lag)
-                        # lags = ceiling(as.numeric(mean(lags$selection, na.rm = T)))
                         granger = ts(granger[,2:3], start = c(year(min(granger$year)), 1), frequency = 12)
-                        lags = as.numeric(VARselect(granger, lag.max = max_lag)$selection[1])
                         lags = VARselect(granger, lag.max = max_lag)
                         lags = ceiling(as.numeric(mean(lags$selection, na.rm = T)))
                         lags = ifelse(is.na(lags), 2, lags)
@@ -77,10 +74,6 @@ granger_calc = function(x, corpus){
                                 x = x %>% left_join(tmp)
                                 names(tmp)[-1] = gsub(".x", ".y", names(tmp[-1]))
                                 x = x %>% left_join(tmp)
-                                
-                                # tmp = tmp %>% gather("uid", "value", -year) %>%
-                                #         add_info(get_meta))
-                                # p = ggplot(tmp, aes(year, value, colour = variablename)) + geom_line()
                                 x = tibble(x, ts = list(granger))
                         }
         
