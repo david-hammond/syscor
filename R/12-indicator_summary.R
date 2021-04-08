@@ -16,6 +16,7 @@
 #' @importFrom dplyr filter
 #' @importFrom dplyr rename
 #' @importFrom dplyr arrange
+#' @importFrom dplyr n
 #' @importFrom dplyr top_n
 #' @importFrom tidyr spread 
 #' @importFrom rlang .data
@@ -48,8 +49,8 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1){
                         filter(f_test < pval)
         }
         grg = grg %>% group_by(variablename.x, variablename.y) %>%
-                summarise(n = n()) %>% top_n(10, n)
-        x = list(corrs = corrs, granger = grg)
+                summarise(n = n()) %>% top_n(10, n) %>% as.data.frame()
+        x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
         
