@@ -25,6 +25,6 @@ systr_granger <- function(corpus) {
         gcodes = corpus %>% pull(geocode) %>% unique()
         tmp <- pblapply(gcodes, granger_execute, 
                         corpus = corpus)
-        tmp <- bind_rows(tmp)
-        return(tmp)
+        # tmp <- bind_rows(tmp)
+        # return(tmp)
 }
