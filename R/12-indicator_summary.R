@@ -37,9 +37,11 @@
 systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1){
         corrs = get_corrs() %>% add_info(get_meta()) %>% 
                 filter(variablename.x == indicator) %>%
-                top_n(10, abs(r))
+                top_n(10, abs(r)) %>% select(variablename.x, variablename.y, r) %>%
+                arrange(desc(abs(r))) %>% mutate(r = round(r, 2)) %>%
+                filter(variablename.x != variablename.y)
         files = list.files()[grepl("granger", list.files())]
-        grg = readRDS[files[1]]
+        grg = readRDS(files[1])
         for (i in files[-1]){
                 tmp = readRDS(i)
                 grg = rbind(grg, tmp) %>% filter(variablename.x == indicator | variablename.y == indicator) %>%
