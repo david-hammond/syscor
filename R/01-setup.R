@@ -16,7 +16,7 @@
 #' @author David Hammond
 #' @export
 
-systr_setup <- function(df, meta, newscale = c(1,5), min_yrs = 10) {
+systr_setup <- function(df, meta, newscale = c(1,5)) {
         saveRDS(meta, systr_file$meta, compress = "xz")
         
         saveRDS(df, systr_file$rawdata, compress = "xz")
