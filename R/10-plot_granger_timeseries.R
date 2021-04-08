@@ -36,5 +36,4 @@
 systr_granger_time_series = function(x, which_row = 1){
         colnames(x$ts[[which_row]]) = gsub(" ", "\n", c(x$variablename.x[which_row], x$variablename.y[which_row]))
         plot(x$ts[[which_row]], cex.lab = 0.7, main = "Time Series")
-        print(c(x$variablename.x[which_row], x$variablename.y[which_row]))
 }
