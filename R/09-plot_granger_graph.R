@@ -33,7 +33,7 @@
 #' @export
 
 
-systr_granger_graph = function(granger, pval = 0.15, filter_for_same_direction = T){
+systr_granger_graph = function(granger, pval = 0.15, filter_for_same_direction = T, plot = T){
         library(igraph)
         x = granger %>% filter(f_test < pval)
         if(filter_for_same_direction){
@@ -53,11 +53,14 @@ systr_granger_graph = function(granger, pval = 0.15, filter_for_same_direction =
         V(g)$color = cols$col[key]
         V(g)$size = 10+igraph::degree(g)
         l <- norm_coords(coords, ymin=-1, ymax=1, xmin=-1, xmax=1)
-        plot(g, edge.arrow.size=0.5, layout = l*1,
-             vertex.label.cex = 0.9, edge.curved=0.15, rescale=F, 
-             vertex.label.family = "Helvetica", main.label.family = "Helvetica",
-             vertex.frame.width = 2, main = unique(granger$geocode))
-        legend("topright",legend=c("Value Decreased", "Value Increased"),col='black',pch=21, pt.cex = 1, 
-               pt.bg=c(good_colour, bad_colour), bg= NA)
+        if(plot){
+                plot(g, edge.arrow.size=0.5, layout = l*1,
+                     vertex.label.cex = 0.9, edge.curved=0.15, rescale=F, 
+                     vertex.label.family = "Helvetica", main.label.family = "Helvetica",
+                     vertex.frame.width = 2, main = unique(granger$geocode))
+                legend("topright",legend=c("Value Decreased", "Value Increased"),col='black',pch=21, pt.cex = 1, 
+                       pt.bg=c(good_colour, bad_colour), bg= NA)
+        }
+
         return(g)
 }
