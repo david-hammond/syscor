@@ -49,7 +49,7 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1){
                         filter(f_test < pval)
         }
         grg = grg %>% group_by(variablename.x, variablename.y) %>%
-                summarise(n = n()) %>% top_n(10, n)
+                summarise(n = n()) %>% top_n(10, n) %>% as.data.frame()
         x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
