@@ -35,10 +35,10 @@
 #' @export
 
 
-systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1){
+systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1, number_to_return = 10){
         corrs = get_corrs() %>% add_info(get_meta()) %>% 
                 filter(variablename.x == indicator) %>%
-                top_n(10, abs(r)) %>% select(variablename.x, variablename.y, r) %>%
+                top_n(number_to_return, abs(r)) %>% select(variablename.x, variablename.y, r) %>%
                 arrange(desc(abs(r))) %>% mutate(r = round(r, 2)) %>%
                 filter(variablename.x != variablename.y)
         files = list.files()[grepl("granger", list.files())]
@@ -50,7 +50,7 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1){
                         filter(f_test < pval)
         }
         grg = grg %>% group_by(variablename.x, variablename.y) %>%
-                summarise(n = n()) %>% top_n(10, n) %>% as.data.frame()  %>% 
+                summarise(n = n()) %>% top_n(number_to_return, n) %>% as.data.frame()  %>% 
                 ungroup() %>%
                 filter(variablename.x == indicator | variablename.y == indicator)
         x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
