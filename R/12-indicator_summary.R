@@ -52,7 +52,8 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1, number_to_
         grg = grg %>% group_by(variablename.x, variablename.y) %>%
                 summarise(n = n()) %>% top_n(number_to_return, n) %>% as.data.frame()  %>% 
                 ungroup() %>%
-                filter(variablename.x == indicator | variablename.y == indicator)
+                filter(variablename.x == indicator | variablename.y == indicator) %>%
+                arrange(desc(n))
         x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
