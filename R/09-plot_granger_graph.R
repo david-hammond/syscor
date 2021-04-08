@@ -54,7 +54,7 @@ systr_granger_graph = function(granger, pval = 0.15, filter_for_same_direction =
         V(g)$size = 10+igraph::degree(g)
         
         if(plot){
-                coords <- try(norm_coords(igraph::layout_with_kk(g)), ymin=-1, ymax=1, xmin=-1, xmax=1)
+                coords <- try(norm_coords(igraph::layout_with_kk(g), ymin=-1, ymax=1, xmin=-1, xmax=1))
                 if(class(coords) == "try-error"){
                         plot(g, edge.arrow.size=0.5, 
                              vertex.label.cex = 0.9, edge.curved=0.15, rescale=F, 
