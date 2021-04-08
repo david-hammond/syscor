@@ -50,7 +50,7 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1){
         }
         grg = grg %>% group_by(variablename.x, variablename.y) %>%
                 summarise(n = n()) %>% top_n(10, n)
-        x = list(corrs = corrs, granger = grg)
+        x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
         
