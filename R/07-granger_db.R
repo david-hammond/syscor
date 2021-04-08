@@ -18,27 +18,13 @@
 #' @importFrom parallel detectCores
 
 #' @author David Hammond
+#' @export
 
-
-granger_db <- function(test = F, subset_granger) {
+systr_granger <- function(corpus) {
         
-        changes = readRDS(systr_file$changes) 
-        
-        bivariates = readRDS(systr_file$correlations) 
-        
-        corpus = readRDS(systr_file$scaled) 
-        
-        
-
-        gcodes = readRDS(systr_file$changes) %>% pull(geocode) %>% unique()
-        if(test){
-               gcodes = gcodes[1:2] 
-        }
+        gcodes = corpus %>% pull(geocode) %>% unique()
         tmp <- pblapply(gcodes, granger_execute, 
-                        changes = changes,
-                        bivariates = bivariates,
-                        corpus = corpus,
-                        subset = subset_granger)
+                        corpus = corpus)
         tmp <- bind_rows(tmp)
-        saveRDS(tmp, file = systr_file$granger)
+        return(tmp)
 }

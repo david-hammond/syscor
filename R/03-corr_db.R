@@ -40,13 +40,6 @@ corr_db <- function(folder, use_geocode_and_time_as_obs = T) {
                         filter(year == max(year)) %>% 
                         select(-year) %>% rename(obs = geocode)
         }
-        test = df %>% group_by(uid) %>%
-                summarise(sd = var(value, na.rm = T)) %>%
-                filter(sd != 0)
-        if(nrow(test) > 0){
-                message("Note, removed vars with zero variance")
-                df <- df %>% filter(uid %in% test$uid)
-        }
 
         df <- df %>% spread(uid, value)
         df <- correlate(df[,-1], use = 'pairwise.complete.obs')

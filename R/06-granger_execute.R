@@ -21,37 +21,39 @@
 #' @author David Hammond
 
 
-granger_execute <- function(gcode, changes, bivariates, corpus, subset_granger) {
+granger_execute <- function(gcode, corpus) {
+        
+        message(paste("Calculating granger for", gcode))
+        
+        changes = readRDS(systr_file$changes) %>%
+                filter(uid %in% corpus$uid, geocode %in% corpus$geocode)
 
-        print(gcode)
+        corpus = corpus %>% 
+                filter(geocode == gcode)
         
-        changes = changes %>% filter(geocode == gcode)
+        bivariates = expand.grid(uid.x = unique(corpus$uid), 
+                                 uid.y = unique(corpus$uid), 
+                                 stringsAsFactors = F) %>% 
+                as.data.frame() %>%
+                filter(uid.x != uid.y)
 
-        
-        bivariates = bivariates %>% add_info(changes) %>%
-                add_info(readRDS(systr_file$meta)) %>%
-                filter(uid.x != uid.y) %>%
-                filter(!is.na(geocode.x) & !is.na(geocode.y))
-        
+
         if(nrow(bivariates) > 0){
-                if(!is.null(subset_granger)){
-                        pos = as.logical(bivariates[,subset_granger[1]] == subset_granger[2])
-                        bivariates = bivariates[pos, ] 
-                }
 
                 bivariates = split(bivariates, 1:nrow(bivariates))
                 
-                corpus = corpus %>% 
-                        filter(geocode == gcode)
+                
                 
                 cl <- makeCluster(detectCores())
                 
-                raw <- parLapply(bivariates, granger_calc, granger_corpus = corpus, cl = cl)
+                raw <- pblapply(bivariates, granger_calc, corpus = corpus, cl = cl)
                 
                 stopCluster(cl)
                 
                 results = bind_rows(raw)
-                
+                fname = paste0("granger_", gcode, ".rds")
+                saveRDS(results, fname, compress = "xz")
+                message(paste("Output saved to", fname))
                 return(results)
         }else{
                 message(paste("Skipping", gcode, "- No Data"))
