@@ -16,6 +16,7 @@
 #' @importFrom dplyr filter
 #' @importFrom dplyr rename
 #' @importFrom dplyr arrange
+#' @importFrom dplyr n
 #' @importFrom dplyr top_n
 #' @importFrom tidyr spread 
 #' @importFrom rlang .data
