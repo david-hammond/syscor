@@ -42,14 +42,17 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1){
                 arrange(desc(abs(r))) %>% mutate(r = round(r, 2)) %>%
                 filter(variablename.x != variablename.y)
         files = list.files()[grepl("granger", list.files())]
-        grg = readRDS(files[1])
+        grg = readRDS(files[1]) %>% filter(variablename.x == indicator | variablename.y == indicator) %>%
+                filter(f_test < pval)
         for (i in files[-1]){
                 tmp = readRDS(i)
                 grg = rbind(grg, tmp) %>% filter(variablename.x == indicator | variablename.y == indicator) %>%
                         filter(f_test < pval)
         }
         grg = grg %>% group_by(variablename.x, variablename.y) %>%
-                summarise(n = n()) %>% top_n(10, n) %>% as.data.frame()
+                summarise(n = n()) %>% top_n(10, n) %>% as.data.frame()  %>% 
+                ungroup() %>%
+                filter(variablename.x == indicator | variablename.y == indicator)
         x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
