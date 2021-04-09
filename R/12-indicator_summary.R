@@ -55,7 +55,7 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1, number_to_
         grg = grg %>%
                 filter(variablename.x == indicator | variablename.y == indicator) %>%
                 distinct() %>% group_by(variablename.x, variablename.y) %>%
-                summarise(lag = ceil(mean(lag, na.rm = T))) %>%
+                summarise(lag = ceiling(mean(lag, na.rm = T))) %>%
                 ungroup() %>%
                 rename(leading = variablename.x, lagging = variablename.y,
                        lag_months = lag)
