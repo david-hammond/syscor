@@ -54,7 +54,8 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1, number_to_
         grg = rbind(y,z)
         grg = grg %>%
                 filter(variablename.x == indicator | variablename.y == indicator) %>%
-                distinct()
+                distinct() %>% select(variablename.x, variablename.y) %>%
+                rename(leading = variablename.x, lagging = variablename.y )
         x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
