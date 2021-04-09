@@ -49,7 +49,7 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1, number_to_
                 grg = rbind(grg, tmp) %>% filter(variablename.x == indicator | variablename.y == indicator) %>%
                         filter(f_test < pval)
         }
-        grg = grg %>% mutate(direction = ifelse(dydt.x == dydt.y, "Same", "Inverse")) %>%
+        grg = grg %>% mutate(direction = ifelse(sign(dydt.x) == sign(dydt.y), "Same", "Inverse")) %>%
                                      group_by(variablename.x, variablename.y, direction) %>%
                 summarise(n = n()) %>% top_n(number_to_return, n) %>% as.data.frame()  %>% 
                 ungroup() %>%
