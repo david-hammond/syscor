@@ -58,7 +58,8 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1, number_to_
                 summarise(lag = ceiling(mean(lag, na.rm = T))) %>%
                 ungroup() %>%
                 rename(leading = variablename.x, lagging = variablename.y,
-                       lag_months = lag)
+                       lag_months = lag) %>%
+                arrange(lag_months)
         x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
