@@ -53,7 +53,8 @@ systr_indicator_summary = function(indicator, rval = 0.5, pval = 0.1, number_to_
         z = grg %>% filter((dydt.x < 0 & dydt.y < 0))
         grg = rbind(y,z)
         grg = grg %>%
-                filter(variablename.x == indicator | variablename.y == indicator) 
+                filter(variablename.x == indicator | variablename.y == indicator) %>%
+                distinct()
         x = list(corrs = as.data.frame(corrs), granger = as.data.frame(grg))
         
         return(x)
